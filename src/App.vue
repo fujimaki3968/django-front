@@ -54,6 +54,9 @@
                 </v-menu>
             </v-toolbar-items>
         </v-app-bar>
+        <v-content>
+            <router-view/>
+        </v-content>
         <v-footer color="primary" dark app>
             aiueo
         </v-footer>
