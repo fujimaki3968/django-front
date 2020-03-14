@@ -27,7 +27,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     import moment from 'moment'
 
     export default {
@@ -41,7 +40,7 @@
         name: "Home",
         methods: {
             fetchData() {
-                axios.get(`${process.env.VUE_APP_API_ENDPOINT}/questions/`).then(res => {
+                this.$request.questions.list().then(res => {
                     this.questions = res.data.results
                 })
             },
@@ -49,8 +48,8 @@
                 if (!this.vote) {
                     return
                 }
-                axios.post(`${process.env.VUE_APP_API_ENDPOINT}/choices/${this.vote}/vote/`).then(res => {
-                    if (res.status !== 200) {
+                this.$request.questions.vote(this.vote).then(res => {
+                    if (res.status !== 200){
                         console.log("error")
                     }
                     this.fetchData()
