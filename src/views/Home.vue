@@ -14,7 +14,7 @@
                                     <v-chip color="primary" style="position: absolute; right: 10px; top: 8px">Votes:{{choice.votes}}</v-chip>
                                 </v-list>
                             </v-radio-group>
-                            <v-btn color="success">POST</v-btn>
+                            <v-btn color="success" @click="Vote" :disabled="!voteEnable(question.choices)">POST</v-btn>
                         </v-card-text>
                         <v-card-text>
                             <div>{{ question.pubDate|printDate }}</div>
@@ -41,10 +41,27 @@
         name: "Home",
         methods: {
             fetchData() {
-                axios.get('http://localhost:8000/api/questions/').then(res => {
+                axios.get(`${process.env.VUE_APP_API_ENDPOINT}/questions/`).then(res => {
                     this.questions = res.data.results
                 })
-            }
+            },
+            Vote: function () {
+                if (!this.vote) {
+                    return
+                }
+                axios.post(`${process.env.VUE_APP_API_ENDPOINT}/choices/${this.vote}/vote/`).then(res => {
+                    if (res.status !== 200) {
+                        console.log("error")
+                    }
+                    this.fetchData()
+                })
+            },
+            voteEnable(choices){
+                if (!this.vote){
+                    return false
+                }
+                return choices.some(x => x.id === this.vote)
+            },
         },
         filters: {
             printDate(val) {
