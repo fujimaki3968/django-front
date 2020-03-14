@@ -7,6 +7,15 @@
                         <v-card-title primary-title>
                             <div>{{ question.questionText }}</div>
                         </v-card-title>
+                        <v-card-text v-if="question.choices.length">
+                            <v-radio-group v-model="vote">
+                                <v-list v-for="choice in question.choices" :key="choice.id" class="text--white" style="position: relative">
+                                    <v-radio :value="choice.id" :label="choice.choiceText"></v-radio>
+                                    <v-chip color="primary" style="position: absolute; right: 10px; top: 8px">Votes:{{choice.votes}}</v-chip>
+                                </v-list>
+                            </v-radio-group>
+                            <v-btn color="success">POST</v-btn>
+                        </v-card-text>
                         <v-card-text>
                             <div>{{ question.pubDate|printDate }}</div>
                         </v-card-text>
@@ -24,6 +33,7 @@
     export default {
         data() {
             return {
+                vote: null,
                 questions: [],
             }
         },
