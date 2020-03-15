@@ -33,7 +33,9 @@
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-btn text>about</v-btn>
+                {{ isLoggedIn }}
+                <v-btn v-if="isLoggedIn" text @click="logout">logout</v-btn>
+                <v-btn v-else text to="./login">login</v-btn>
                 <v-menu offset-y>
                     <template v-slot:activator="{on}">
                         <v-btn v-on="on" text>Support
@@ -64,7 +66,18 @@
 </template>
 
 <script>
+    import {mapActions, mapGetters} from 'vuex'
+
     export default {
+        created() {
+            this.tryLogin()
+        },
+        computed: {
+            ...mapGetters(['isLoggedIn'])
+        },
+        methods: {
+            ...mapActions(['login', 'logout', 'tryLogin'])
+        },
         data() {
             return {
                 title: this.$route.name,

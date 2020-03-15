@@ -23,6 +23,8 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+
     export default {
         name: 'Login',
         data() {
@@ -41,9 +43,10 @@
             }
         },
         methods: {
+            ...mapActions(['login']),
             submit() {
-                this.$request.auth.login(this.username, this.password).then(res => {
-                    this.$request.defaults.headers.common['Authorization'] = `JWT ${res.data.token}`
+                this.login([this.username, this.password]).then(res => {
+                    console.log(res);
                     this.$router.push('/')
                 }, err => {
                     console.log(err);
