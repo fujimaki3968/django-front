@@ -36,7 +36,11 @@ const actions = {
     tryLogin ({commit}) {
         const token = localStorage.getItem('token');
         if (token) {
-            commit('loggedIn', token)
+            client.auth.verify(token).then(() => {
+                commit('loggedIn', token)
+            }, () => {
+               localStorage.clear()
+            })
         }
     }
 };

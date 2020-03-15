@@ -6,6 +6,9 @@ export default function (cli) {
                 password,
             };
             return cli.post('auth/', data)
-        }
+        },
+        verify (token) {
+            return cli.post('auth/verify/', {token})
+        },
     }
 }
