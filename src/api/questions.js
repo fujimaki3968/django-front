@@ -3,8 +3,8 @@ export default function (cli) {
         list () {
             return cli.get('api/questions/')
         },
-        vote (choiceId) {
-            return cli.post(`api/choices/${choiceId}/vote/`)
+        vote (choiceId, token) {
+            return cli.post(`api/choices/${choiceId}/vote/`, {token})
         }
     }
 }

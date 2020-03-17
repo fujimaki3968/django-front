@@ -28,6 +28,7 @@
 
 <script>
     import moment from 'moment'
+    import {mapActions, mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -38,7 +39,11 @@
         },
 
         name: "Home",
+        computed: {
+            ...mapGetters(['votedLog', 'isLoggedIn'])
+        },
         methods: {
+            ...mapActions(['tryVote']),
             fetchData() {
                 this.$request.questions.list().then(res => {
                     this.questions = res.data.results
@@ -48,15 +53,12 @@
                 if (!this.vote) {
                     return
                 }
-                this.$request.questions.vote(this.vote).then(res => {
-                    if (res.status !== 200){
-                        console.log("error")
-                    }
+                this.tryVote(this.vote).then(
                     this.fetchData()
-                })
+                )
             },
             voteEnable(choices){
-                if (!this.vote){
+                if (!this.vote || !this.isLoggedIn){
                     return false
                 }
                 return choices.some(x => x.id === this.vote)
